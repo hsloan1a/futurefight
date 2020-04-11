@@ -5,7 +5,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import com.futurefight.characters.exception.MarvelCharacterNotFound;
 import com.futurefight.characters.model.MarvelCharacter;
 import com.futurefight.characters.repository.MarvelCharacterRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -36,7 +35,7 @@ public class CharacterController {
     ResponseEntity<CollectionModel<EntityModel<MarvelCharacter>>> findAll() {
         List<EntityModel<MarvelCharacter>> characters = StreamSupport.stream(marvelCharacterRepository.findAll().spliterator(), false)
                 .map(character -> new EntityModel<>(character,
-                        linkTo(methodOn(this.getClass()).getCharacter(new ObjectId(character.getId()))).withSelfRel(),
+                        linkTo(methodOn(this.getClass()).getCharacter(character.getId())).withSelfRel(),
                         linkTo(methodOn(this.getClass()).findAll()).withRel("characters")))
                 .collect(Collectors.toList());
 
@@ -45,12 +44,12 @@ public class CharacterController {
     }
 
     @GetMapping("/character/{id}")
-    public EntityModel<MarvelCharacter> getCharacter(@PathVariable ObjectId id){
+    public EntityModel<MarvelCharacter> getCharacter(@PathVariable Integer id){
         Optional<MarvelCharacter> findCharacter = marvelCharacterRepository.findById(id);
         if (!findCharacter.isPresent())
             throw new MarvelCharacterNotFound("Character with id=" + id);
 
-        EntityModel<MarvelCharacter> resource = new EntityModel<MarvelCharacter>(findCharacter.get());
+        EntityModel<MarvelCharacter> resource = new EntityModel<>(findCharacter.get());
         WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).findAll());
         resource.add(linkTo.withRel("all-users"));
 
@@ -63,7 +62,7 @@ public class CharacterController {
             MarvelCharacter savedCharacter = marvelCharacterRepository.save(marvelCharacter);
 
             EntityModel<MarvelCharacter> characterResource = new EntityModel<>(savedCharacter,
-                    linkTo(methodOn(this.getClass()).getCharacter(new ObjectId(savedCharacter.getId()))).withSelfRel());
+                    linkTo(methodOn(this.getClass()).getCharacter(savedCharacter.getId())).withSelfRel());
 
 
             return ResponseEntity

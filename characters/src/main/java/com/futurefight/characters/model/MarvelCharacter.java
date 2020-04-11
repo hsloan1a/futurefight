@@ -1,34 +1,35 @@
 package com.futurefight.characters.model;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 
-@Document(collection = "marvel_character")
+@Entity(name = "marvel_character")
 public class MarvelCharacter {
 
     @Id
-    private ObjectId id;
+    private Integer id;
 
     @Column(name = "character_name", unique = true)
     private String name;
 
-    @Enumerated
     private Affinity affinity;
 
     public MarvelCharacter() {
     }
 
 
-    public MarvelCharacter(ObjectId id, String name, Affinity affinity) {
+    public MarvelCharacter(Integer id, String name, Affinity affinity) {
         this.affinity = affinity;
         this.id = id;
         this.name = name;
     }
 
-    public String getId() {
-        return id.toString();
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {

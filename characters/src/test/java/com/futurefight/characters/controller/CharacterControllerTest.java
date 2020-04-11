@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.futurefight.characters.model.Affinity;
 import com.futurefight.characters.model.MarvelCharacter;
 import com.futurefight.characters.repository.MarvelCharacterRepository;
-import org.bson.types.ObjectId;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -48,15 +46,15 @@ public class CharacterControllerTest {
     public void testGetAll() throws Exception {
         List<MarvelCharacter> marvelCharacterList = new ArrayList<>();
         marvelCharacterList.add(new MarvelCharacter(
-                new ObjectId("507f191e810c19729de860ea"),
+                1,
                 "Wasp",
                 Affinity.blast));
         marvelCharacterList.add(new MarvelCharacter(
-                new ObjectId("507f191e810c19729de860eb"),
+                2,
                 "Ant Man",
                 Affinity.speed));
         marvelCharacterList.add(new MarvelCharacter(
-                new ObjectId("507f191e810c19729de860ec"),
+                3,
                 "Thanos",
                 Affinity.universal));
 
@@ -76,21 +74,21 @@ public class CharacterControllerTest {
 
     @Test
     public void testGetCharacter() throws Exception {
-        ObjectId objectId = new ObjectId("507f191e810c19729de860fa");
+        Integer marvelCharacterKey = 4;
         MarvelCharacter marvelCharacter = new MarvelCharacter(
-                objectId,
+                marvelCharacterKey,
                 "Black Panther",
                 Affinity.combat);
 
 
-        when(marvelCharacterRepository.findById(objectId)).thenReturn(Optional.of(marvelCharacter));
-        mockMvc.perform(get("/character/" + objectId).contentType(MediaType.APPLICATION_JSON).accept(
+        when(marvelCharacterRepository.findById(marvelCharacterKey)).thenReturn(Optional.of(marvelCharacter));
+        mockMvc.perform(get("/character/" + marvelCharacterKey).contentType(MediaType.APPLICATION_JSON).accept(
                 MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.jsonPath("links[0].rel").value("all-users"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(marvelCharacter.getName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(objectId.toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(marvelCharacterKey))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.affinity").value(Affinity.combat.toString()));
 
     }
@@ -98,7 +96,7 @@ public class CharacterControllerTest {
     @Test
     public void testCreateCharacter() throws Exception {
         MarvelCharacter marvelCharacter = new MarvelCharacter(
-                new ObjectId("507f191e810c19729de830fa"),
+                5,
                 "Iron Man",
                 Affinity.blast);
 
