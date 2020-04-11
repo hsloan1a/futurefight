@@ -1,0 +1,57 @@
+version: '3.7'
+
+services:
+  shadowland:
+    container_name: shadowland-micro-service
+    build: ./shadowland-micro-service/.
+    command: mvn spring-boot:run -Dagentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:4000
+    volumes:
+      - ./shadowland-micro-service:/shadowland-micro-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "4000:4000"
+    networks:
+      - your-network
+    links:
+      - namingserver
+  character:
+    container_name: character-micro-service
+    build: ./characters/.
+    command: mvn spring-boot:run -Dagentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:4100
+    volumes:
+      - ./characters:/characters
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "4100:4100"
+    networks:
+      - your-network
+    links:
+      - namingserver
+  namingserver:
+    container_name: naming-server-service
+    build: ./naming-server/.
+    command: mvn spring-boot:run -Dagentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8761
+    volumes:
+      - ./naming-server:/naming-server
+    ports:
+      - "8761:8761"
+    networks:
+      - your-network
+    links:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    restart: always
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: mypassword
+    networks:
+      - your-network
+networks:
+   your-network:
+    name: futurefight
