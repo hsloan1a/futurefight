@@ -15,3 +15,7 @@ in the root folder, docker-compose up
 
 The naming server is on port 8761
 To access, open this on your local machine http://localhost:8761/
+
+created an API (Netflix Zuul) server. 
+I'm able to use postman and do a get to {{localhost_api}}/characters/characters to get all of the characters. It will
+ be helpful if I ever decide to have multiple instances

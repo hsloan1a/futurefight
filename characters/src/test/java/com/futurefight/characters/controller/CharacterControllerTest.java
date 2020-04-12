@@ -48,15 +48,21 @@ public class CharacterControllerTest {
         marvelCharacterList.add(new MarvelCharacter(
                 1,
                 "Wasp",
-                Affinity.blast));
+                Affinity.blast,
+                "female",
+                "Hero"));
         marvelCharacterList.add(new MarvelCharacter(
                 2,
                 "Ant Man",
-                Affinity.speed));
+                Affinity.speed,
+                "male",
+                "hero"));
         marvelCharacterList.add(new MarvelCharacter(
                 3,
                 "Thanos",
-                Affinity.universal));
+                Affinity.universal,
+                "male",
+                "villian"));
 
         when(marvelCharacterRepository.findAll()).thenReturn(marvelCharacterList);
         mockMvc.perform(get("/characters").contentType(MediaType.APPLICATION_JSON).accept(
@@ -78,7 +84,9 @@ public class CharacterControllerTest {
         MarvelCharacter marvelCharacter = new MarvelCharacter(
                 marvelCharacterKey,
                 "Black Panther",
-                Affinity.combat);
+                Affinity.combat,
+                "male",
+                "Hero");
 
 
         when(marvelCharacterRepository.findById(marvelCharacterKey)).thenReturn(Optional.of(marvelCharacter));
@@ -98,7 +106,9 @@ public class CharacterControllerTest {
         MarvelCharacter marvelCharacter = new MarvelCharacter(
                 5,
                 "Iron Man",
-                Affinity.blast);
+                Affinity.blast,
+                "male",
+                "Hero");
 
         String marvelCharacterAsString = new ObjectMapper().writeValueAsString(marvelCharacter);
         when(marvelCharacterRepository.save(Mockito.any(MarvelCharacter.class))).thenReturn(marvelCharacter);

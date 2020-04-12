@@ -29,6 +29,20 @@ services:
       - your-network
     links:
       - namingserver
+  api-server:
+    container_name: api-server-service
+    build: ./api-server/.
+    command: mvn spring-boot:run -Dagentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8765
+    volumes:
+      - ./api-server:/api-server
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8765:8765"
+    networks:
+      - your-network
+    links:
+      - namingserver
   namingserver:
     container_name: naming-server-service
     build: ./naming-server/.
