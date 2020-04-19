@@ -54,18 +54,39 @@ services:
     networks:
       - your-network
     links:
-      - mongo
-  mongo:
-    container_name: mongo
-    image: mongo
+      - postgres
+  postgress-admin: #localhost:5050
+    container_name: postgress-admin
+    image: dpage/pgadmin4
     restart: always
     ports:
-      - "27018:27017"
+      - "5050:80"
+#    volumes:
+#      - postgress-admin:/root/.pgadmin
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: mypassword
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    links:
+      - postgres
     networks:
       - your-network
+  postgres:
+    container_name: postgres_container
+    image: postgres
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: something_else
+      POSTGRES_DB: FutureFight
+#      PGDATA: /data/postgres
+#    volumes:
+#      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - your-network
+    restart: unless-stopped
 networks:
    your-network:
     name: futurefight
