@@ -1,5 +1,7 @@
 package com.futurefight.shadowland.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +14,7 @@ public class ShadowlandCharacter {
     private Integer character_id;
 
     @Transient
+    @JsonDeserialize
     private String character_name;
 
     private String affinity;

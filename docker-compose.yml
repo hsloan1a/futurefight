@@ -43,6 +43,20 @@ services:
       - your-network
     links:
       - namingserver
+  react-client:
+    container_name: react-client
+    stdin_open: true # needed because of bug...https://github.com/facebook/create-react-app/issues/8688
+    build:
+      context: ./react-client/.
+    volumes:
+      - ./react-client:/client
+    ports:
+      - "3000:3000"
+    networks:
+      - your-network
+    links:
+      - shadowland
+      - character
   namingserver:
     container_name: naming-server-service
     build: ./naming-server/.
@@ -73,20 +87,20 @@ services:
   postgres:
     container_name: postgres_container
     image: postgres
-#    volumes:
-#      - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: something_else
       POSTGRES_DB: FutureFight
-#      PGDATA: /data/postgres
-#    volumes:
-#      - postgres:/data/postgres
+#      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
       - your-network
     restart: unless-stopped
+volumes:
+  pgdata:
 networks:
    your-network:
     name: futurefight
