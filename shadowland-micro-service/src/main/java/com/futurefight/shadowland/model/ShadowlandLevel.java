@@ -20,15 +20,18 @@ public class ShadowlandLevel {
 
     private FloorType floor_type;
 
+    private String character_portrait;
+
     private Integer level;
 
     public ShadowlandLevel() {
     }
 
-    public ShadowlandLevel(@Nullable Set<ShadowlandLevelWinDetails> previously_won, FloorType floor_type, Integer level) {
+    public ShadowlandLevel(@Nullable Set<ShadowlandLevelWinDetails> previously_won, FloorType floor_type, Integer level, String character_portrait) {
         this.previously_won = previously_won;
         this.floor_type = floor_type;
         this.level = level;
+        this.character_portrait = character_portrait;
     }
 
     public Long getId() {
@@ -62,5 +65,13 @@ public class ShadowlandLevel {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public String getCharacter_portrait() {
+        return character_portrait;
+    }
+
+    public void setCharacter_portrait(String character_portrait) {
+        this.character_portrait = character_portrait;
     }
 }

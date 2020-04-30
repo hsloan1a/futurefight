@@ -11,6 +11,7 @@
     "@types/node": "^12.12.35",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
+    "@types/underscore": "^1.9.4",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "react": "^16.13.1",
@@ -18,7 +19,8 @@
     "react-dom": "^16.13.1",
     "react-icons": "^3.10.0",
     "react-scripts": "3.4.1",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "underscore": "^1.10.2"
   },
   "scripts": {
     "start": "react-scripts start",

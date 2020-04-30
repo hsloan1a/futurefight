@@ -3,9 +3,13 @@ package com.futurefight.shadowland.controller;
 import com.futurefight.shadowland.model.ShadowlandLevel;
 import com.futurefight.shadowland.service.ShadowlandLevelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -20,8 +24,9 @@ public class ShadowlandLevelController {
     }
 
     @PostMapping("/")
-    public ShadowlandLevel addShadowlandLevel(@Valid @RequestBody ShadowlandLevel shadowlandLevel){
-        return shadowlandLevelService.addLevel(shadowlandLevel);
+    public ResponseEntity<Object> addShadowlandLevel(@Valid @RequestBody ShadowlandLevel shadowlandLevel){
+        ShadowlandLevel addedLevel = shadowlandLevelService.addLevel(shadowlandLevel);
+        return new ResponseEntity<>(addedLevel, HttpStatus.CREATED);
     }
 
     @GetMapping("/")
