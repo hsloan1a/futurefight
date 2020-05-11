@@ -9,11 +9,13 @@ import Form from 'react-bootstrap/Form';
 import {ShadowlandLevelType} from "../../../constants/ShadowlandLevelType";
 
 import "./LevelListDetail.css"
+import {ShadowlandFloorAdvantageType} from "../../../constants/ShadowlandFloorAdvantageType";
 
 type levelListDetailProps = {
     levelList: Array<Level>,
     createLevel: (arg0: Level) => void,
-    currentSelectedLevel: number
+    currentSelectedLevel: number,
+    deleteLevel: (arg0: number) => void
 }
 
 const LevelListDetail = (props: levelListDetailProps) => {
@@ -29,6 +31,7 @@ const LevelListDetail = (props: levelListDetailProps) => {
             "floor_type": event.currentTarget.levelSelect.value,
             "level": props.currentSelectedLevel,
             "character_portrait": event.currentTarget.boss.value,
+            "floor_advantage": event.currentTarget.affinitySelect.value
         };
         props.createLevel(level);
         handleClose()
@@ -46,24 +49,31 @@ const LevelListDetail = (props: levelListDetailProps) => {
                             type="input"
                             placeholder="Boss"
                             name="boss"
-                            // onChange={(event) => handleChange(event)}
                         />
-                        <Form.Label>Custom select</Form.Label>
+                        <Form.Label>Level Type</Form.Label>
                         <Form.Control name="levelSelect" as="select" custom>
                             {ShadowlandLevelType.map((levelType, index) => {
                                 return <option key={index} value={levelType.backend}>{levelType.description}</option>
                             })}
                         </Form.Control>
 
-                        <Button variant="secondary" onClick={handleClose}>Close</Button>
-                        <Button variant="primary" type="submit">Submit form</Button>
+                        <Form.Label>Floor Advantage</Form.Label>
+                        <Form.Control name="affinitySelect" as="select" custom>
+                            {ShadowlandFloorAdvantageType.map((levelType, index) => {
+                                return <option key={index} value={levelType.backend}>{levelType.description}</option>
+                            })}
+                        </Form.Control>
+
+
+                        <Button className={"formButton"} variant="secondary" onClick={handleClose}>Close</Button>
+                        <Button className={"formButton"} variant="primary" type="submit">Submit form</Button>
                     </Form>
                 </Modal.Body>
             </Modal>
         )
     };
 
-    const displayAccordian = (levelList: Array<Level>) => {
+    const displayAccordion = (levelList: Array<Level>) => {
         if (levelList.length <= 0)
             return null;
         return (
@@ -76,7 +86,7 @@ const LevelListDetail = (props: levelListDetailProps) => {
                                 {level.floor_type} {level.character_portrait}
                             </Accordion.Toggle>
                             <Accordion.Collapse eventKey={level.id ? level.id.toString() : index.toString()}>
-                                <AccordionDetail></AccordionDetail>
+                                <AccordionDetail deleteLevel={props.deleteLevel} floorLevel={level} />
                             </Accordion.Collapse>
                         </Card>
                     )
@@ -89,7 +99,7 @@ const LevelListDetail = (props: levelListDetailProps) => {
 
     return (
         <div>
-            {displayAccordian(props.levelList)}
+            {displayAccordion(props.levelList)}
             <Button onClick={handleShow}>Add New Level</Button>
             {addModal()}
         </div>
@@ -98,10 +108,16 @@ const LevelListDetail = (props: levelListDetailProps) => {
 
 export default LevelListDetail
 
-const AccordionDetail = () => {
+type accordianDetailProps = {
+    deleteLevel: (arg0: number) => void,
+    floorLevel: Level
+}
+
+const AccordionDetail = (props: accordianDetailProps) => {
     return (
         <div>
-            <Button>Delete</Button>
+            <Button onClick={() => {props.deleteLevel(props.floorLevel.id ? props.floorLevel.id : 0)}}>Delete</Button>
+            <p>Use Again</p>
             <p>hold</p>
         </div>
     )

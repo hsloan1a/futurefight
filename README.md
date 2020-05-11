@@ -21,6 +21,7 @@ I'm able to use postman and do a get to {{localhost_api}}/characters/characters 
  be helpful if I ever decide to have multiple instances
  
  ####Connecting to postgres with PGAdmin
+ url = http://localhost:5050/browser/  
  Host/name = host.docker.internal  
  Maintenance Database = FutureFight  
  Username = postgres  

@@ -5,5 +5,6 @@ export interface Level {
     previously_won?: LevelWinDetails,
     floor_type: string,
     level: number,
-    character_portrait: string
+    character_portrait: string,
+    floor_advantage: string
 }

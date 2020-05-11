@@ -2,6 +2,7 @@ package com.futurefight.shadowland.model;
 
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 public class ShadowlandLevelWinDetails {
@@ -16,10 +17,25 @@ public class ShadowlandLevelWinDetails {
     @JoinColumn(name = "shadowlandLevel_id", nullable = true)
     private ShadowlandLevel shadowlandLevel;
 
+    @Basic
+    private Date won_date;
+
     private String notes;
 
     public ShadowlandLevelWinDetails() {
     }
+
+    public ShadowlandLevelWinDetails(Long id,
+                                     ShadowlandLevel shadowlandLevel,
+                                     Date won_date,
+                                     String notes)
+    {
+        this.id = id;
+        this.shadowlandLevel = shadowlandLevel;
+        this.won_date = won_date;
+        this.notes = notes;
+    }
+
 
 
     public Long getId() {
@@ -44,5 +60,13 @@ public class ShadowlandLevelWinDetails {
 
     public void setShadowlandLevel(ShadowlandLevel shadowlandLevel) {
         this.shadowlandLevel = shadowlandLevel;
+    }
+
+    public Date getWon_date() {
+        return won_date;
+    }
+
+    public void setWon_date(Date won_date) {
+        this.won_date = won_date;
     }
 }
