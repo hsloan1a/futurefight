@@ -5,3 +5,12 @@
 .formButton {
     margin-top: 10px;
 }
+
+.AccordionDetail {
+    color: green;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+}

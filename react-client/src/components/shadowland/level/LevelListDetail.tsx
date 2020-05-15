@@ -2,20 +2,23 @@ import React, {useState} from 'react'
 import {Level} from "../model/Level";
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
-
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from 'react-bootstrap/Form';
+import {find} from "underscore"
+
+import {AccordionDetail} from "./Accordion/AccordionDetail";
 import {ShadowlandLevelType} from "../../../constants/ShadowlandLevelType";
+import {ShadowlandFloorAdvantageType} from "../../../constants/ShadowlandFloorAdvantageType";
 
 import "./LevelListDetail.css"
-import {ShadowlandFloorAdvantageType} from "../../../constants/ShadowlandFloorAdvantageType";
 
 type levelListDetailProps = {
     levelList: Array<Level>,
     createLevel: (arg0: Level) => void,
     currentSelectedLevel: number,
-    deleteLevel: (arg0: number) => void
+    deleteLevel: (arg0: number) => void,
+    currentSelectedLevelDetail: (arg0: Level) => void
 }
 
 const LevelListDetail = (props: levelListDetailProps) => {
@@ -31,7 +34,8 @@ const LevelListDetail = (props: levelListDetailProps) => {
             "floor_type": event.currentTarget.levelSelect.value,
             "level": props.currentSelectedLevel,
             "character_portrait": event.currentTarget.boss.value,
-            "floor_advantage": event.currentTarget.affinitySelect.value
+            "floor_advantage": event.currentTarget.affinitySelect.value,
+            "previously_won": []
         };
         props.createLevel(level);
         handleClose()
@@ -76,17 +80,24 @@ const LevelListDetail = (props: levelListDetailProps) => {
     const displayAccordion = (levelList: Array<Level>) => {
         if (levelList.length <= 0)
             return null;
+        console.log(levelList,"here")
         return (
             <Accordion defaultActiveKey="0">
                 <p>Type/Boss</p>
                 {props.levelList.map((level, index) => {
+                    const levelId = level.id ? level.id : index;
+                    const floorAdvantage = find(ShadowlandFloorAdvantageType, (advantageType) =>
+                                            { return advantageType.backend === level.floor_advantage})
+                    const floorType = find(ShadowlandLevelType, (levelType) =>
+                                            { return levelType.backend === level.floor_type})
                     return (
-                        <Card key={level.id}>
-                            <Accordion.Toggle as={Card.Header} eventKey={level.id ? level.id.toString() : index.toString()}>
-                                {level.floor_type} {level.character_portrait}
+                        <Card key={levelId} onClick={() => {props.currentSelectedLevelDetail(level)}}>
+                            <Accordion.Toggle as={Card.Header} eventKey={levelId.toString()}>
+                                {floorType?.description} {level.character_portrait} { floorAdvantage?.description}
+                                <Button onClick={() => {props.deleteLevel(levelId)}}>Delete</Button>
                             </Accordion.Toggle>
-                            <Accordion.Collapse eventKey={level.id ? level.id.toString() : index.toString()}>
-                                <AccordionDetail deleteLevel={props.deleteLevel} floorLevel={level} />
+                            <Accordion.Collapse eventKey={levelId.toString()}>
+                                <AccordionDetail floorLevel={level} />
                             </Accordion.Collapse>
                         </Card>
                     )
@@ -108,17 +119,3 @@ const LevelListDetail = (props: levelListDetailProps) => {
 
 export default LevelListDetail
 
-type accordianDetailProps = {
-    deleteLevel: (arg0: number) => void,
-    floorLevel: Level
-}
-
-const AccordionDetail = (props: accordianDetailProps) => {
-    return (
-        <div>
-            <Button onClick={() => {props.deleteLevel(props.floorLevel.id ? props.floorLevel.id : 0)}}>Delete</Button>
-            <p>Use Again</p>
-            <p>hold</p>
-        </div>
-    )
-}

@@ -1,0 +1,7 @@
+
+.CharacterAdd {
+    display: flex;
+    flex: fit-content;
+    justify-content: space-around;
+}
+

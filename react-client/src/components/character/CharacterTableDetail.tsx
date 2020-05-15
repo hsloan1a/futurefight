@@ -1,5 +1,4 @@
 import React from 'react'
-import {ButtonGroup, Button, DropdownButton, Dropdown, Table} from 'react-bootstrap';
 import {Character} from "../shadowland/model/Character";
 
 type CharactersProps = {

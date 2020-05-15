@@ -1,46 +1,41 @@
 import React from 'react'
-import {ButtonGroup, Button, DropdownButton, Dropdown, Table} from 'react-bootstrap';
+import {Table} from 'react-bootstrap';
 import {Character} from "../shadowland/model/Character";
-import axios from "axios";
-import {map, uniq} from "underscore";
-import CharacterTableDetail from "./Character";
+import {filter} from "underscore";
+import CharacterTableDetail from "./CharacterTableDetail";
 
 type CharacterListProps = {
-    characterList: Array<Character>
+    filteredList: Array<Character>,
+    title: string,
+}
+
+type CharacterListState = {
+    filterString: string,
 }
 
 
-class CharacterList extends React.Component<any,any> {
+class CharacterList extends React.Component<CharacterListProps,CharacterListState> {
     state = {
-        allCharacters: []
+        filterString: ""
     }
 
-    componentDidMount = (): void => {
-        axios.get(process.env.REACT_APP_APP_BACKEND_BASEURL + 'characters/characters').then((response) => {
-            if (response.data) {
-                let characterList = uniq(map(response.data._embedded.marvelCharacterList, (character: Character) => {return character}));
-                console.log("app", characterList);
-                this.setState({allCharacters: characterList});
 
-            }
-        })
-    }
     render() {
-        const {allCharacters} = this.state;
+        const {filterString} = this.state;
+        const {title, filteredList} = this.props;
+
+
+        const textFilteredList = filterString ? filter(filteredList, (character :Character) => {
+            return character.name.toLowerCase().includes(filterString.toLowerCase())
+        }) : filteredList;
+
         return (
             <div>
-                <ButtonGroup>
-                    <Button>All</Button>
-                    <Button>Blast</Button>
-                    <Button>Combat</Button>
-                    <Button>Speed</Button>
-                    <Button>Universal</Button>
-                </ButtonGroup>
-
-                <DropdownButton as={ButtonGroup} title="Dropdown" id="bg-nested-dropdown">
-                    <Dropdown.Item eventKey="1">Dropdown link</Dropdown.Item>
-                    <Dropdown.Item eventKey="2">Dropdown link</Dropdown.Item>
-                </DropdownButton>
+                <p>{title}</p>
+                <label>
+                    Search
+                    <input onChange={event => this.searchFilterText(event)}/>
+                </label>
                 <Table striped bordered hover variant="dark">
                     <thead>
                     <tr>
@@ -51,12 +46,15 @@ class CharacterList extends React.Component<any,any> {
                     </tr>
                     </thead>
                     <tbody>
-                    {allCharacters && <CharacterTableDetail characterList={allCharacters} />}
+                    {filteredList && filteredList.length > 0 && <CharacterTableDetail characterList={textFilteredList} />}
                     </tbody>
                 </Table>
             </div>
         )
     }
 
+    private searchFilterText(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({filterString: event.target.value})
+    }
 }
 export default CharacterList;
