@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ShadowlandCharacterRepository extends JpaRepository<ShadowlandCharacter, Long> {
+public interface ShadowlandCharacterRepository extends JpaRepository<ShadowlandCharacter, Integer> {
+    ShadowlandCharacter findByCharacterId(Integer id);
 }

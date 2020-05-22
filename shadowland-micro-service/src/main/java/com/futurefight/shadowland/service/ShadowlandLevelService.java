@@ -10,9 +10,12 @@ import java.util.List;
 @Service
 public class ShadowlandLevelService {
 
-    @Autowired
     private ShadowlandLevelRepository shadowlandLevelRepository;
 
+    @Autowired
+    ShadowlandLevelService(ShadowlandLevelRepository shadowlandLevelRepository){
+        this.shadowlandLevelRepository = shadowlandLevelRepository;
+    }
 
     public ShadowlandLevel addLevel(ShadowlandLevel shadowlandLevel) {return shadowlandLevelRepository.save(shadowlandLevel);}
 

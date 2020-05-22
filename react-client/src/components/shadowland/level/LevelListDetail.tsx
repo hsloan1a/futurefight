@@ -8,6 +8,7 @@ import Form from 'react-bootstrap/Form';
 import {find} from "underscore"
 
 import {AccordionDetail} from "./Accordion/AccordionDetail";
+import {Character} from "../model/Character";
 import {ShadowlandLevelType} from "../../../constants/ShadowlandLevelType";
 import {ShadowlandFloorAdvantageType} from "../../../constants/ShadowlandFloorAdvantageType";
 
@@ -18,7 +19,8 @@ type levelListDetailProps = {
     createLevel: (arg0: Level) => void,
     currentSelectedLevel: number,
     deleteLevel: (arg0: number) => void,
-    currentSelectedLevelDetail: (arg0: Level) => void
+    currentSelectedLevelDetail: (arg0: Level) => void,
+    charactersToAdd: Character[]
 }
 
 const LevelListDetail = (props: levelListDetailProps) => {
@@ -80,7 +82,6 @@ const LevelListDetail = (props: levelListDetailProps) => {
     const displayAccordion = (levelList: Array<Level>) => {
         if (levelList.length <= 0)
             return null;
-        console.log(levelList,"here")
         return (
             <Accordion defaultActiveKey="0">
                 <p>Type/Boss</p>
@@ -97,7 +98,7 @@ const LevelListDetail = (props: levelListDetailProps) => {
                                 <Button onClick={() => {props.deleteLevel(levelId)}}>Delete</Button>
                             </Accordion.Toggle>
                             <Accordion.Collapse eventKey={levelId.toString()}>
-                                <AccordionDetail floorLevel={level} />
+                                <AccordionDetail charactersToAdd={props.charactersToAdd} floorLevel={level} />
                             </Accordion.Collapse>
                         </Card>
                     )

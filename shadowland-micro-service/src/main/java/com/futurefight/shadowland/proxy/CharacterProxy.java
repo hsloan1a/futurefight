@@ -17,6 +17,6 @@ public interface CharacterProxy {
     public ResponseEntity<CollectionModel<EntityModel<ShadowlandCharacter>>> findAll();
 
     @GetMapping("/characters/character/{id}")
-    public EntityModel<ShadowlandCharacter> getCharacter(@PathVariable Integer id);
+    public EntityModel<ShadowlandCharacter> getCharacter(@PathVariable("id") Integer id);
 
     }

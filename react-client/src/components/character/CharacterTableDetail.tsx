@@ -2,23 +2,18 @@ import React from 'react'
 import {Character} from "../shadowland/model/Character";
 
 type CharactersProps = {
-    characterList: Array<Character>
+    character: Character,
+    addCharacter: (argv0: Character) => void
 }
 
 const CharacterTableDetail = (props: CharactersProps) => {
     return(
-        <>
-            {props.characterList.map(character => {
-            return (
-                <tr key={character.id}>
-                    <td>{character.name}</td>
-                    <td>{character.affinity}</td>
-                    <td>{character.gender}</td>
-                    <td>{character.side}</td>
-                </tr>
-            )
-        })}
-            </>
+        <tr key={props.character.id} onClick={() => props.addCharacter(props.character)}>
+            <td>{props.character.name}</td>
+            <td>{props.character.affinity}</td>
+            <td>{props.character.gender}</td>
+            <td>{props.character.side}</td>
+        </tr>
     )
 };
 

@@ -2,6 +2,7 @@ package com.futurefight.shadowland.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
@@ -10,9 +11,10 @@ public class ShadowlandCharacter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    private Integer character_id;
+    @Column(name = "character_id")
+    private Integer characterId;
 
     @Transient
     @JsonDeserialize
@@ -32,35 +34,48 @@ public class ShadowlandCharacter {
     private String side;
 
     private Integer suggested_level;
+
     private Integer lowest_level;
+
     private Integer highest_level;
 
     public ShadowlandCharacter() {
     }
 
-    public ShadowlandCharacter(Long id, Integer character_id, String character_name, String affinity, String gender, String side) {
+    public ShadowlandCharacter(Integer id,
+                               Integer characterId,
+                               String character_name,
+                               String affinity,
+                               String gender,
+                               String side,
+                               Integer suggested_level,
+                               Integer lowest_level,
+                               Integer highest_level) {
         this.id = id;
-        this.character_id = character_id;
+        this.characterId = characterId;
         this.character_name = character_name;
         this.affinity = affinity;
         this.gender = gender;
         this.side = side;
+        this.suggested_level = suggested_level;
+        this.lowest_level = lowest_level;
+        this.highest_level = highest_level;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Integer getCharacter_id() {
-        return character_id;
+    public Integer getCharacterId() {
+        return characterId;
     }
 
-    public void setCharacter_id(Integer character_id) {
-        this.character_id = character_id;
+    public void setCharacterId(Integer characterId) {
+        this.characterId = characterId;
     }
 
     public String getCharacter_name() {
@@ -95,8 +110,32 @@ public class ShadowlandCharacter {
         this.side = side;
     }
 
+    public Integer getSuggested_level() {
+        return suggested_level;
+    }
+
+    public void setSuggested_level(Integer suggested_level) {
+        this.suggested_level = suggested_level;
+    }
+
+    public Integer getLowest_level() {
+        return lowest_level;
+    }
+
+    public void setLowest_level(Integer lowest_level) {
+        this.lowest_level = lowest_level;
+    }
+
+    public Integer getHighest_level() {
+        return highest_level;
+    }
+
+    public void setHighest_level(Integer highest_level) {
+        this.highest_level = highest_level;
+    }
+
     public void copyFromCharacterProxy(ShadowlandCharacter fromProxy){
-        this.setCharacter_id(fromProxy.getId().intValue());
+        this.setCharacterId(fromProxy.getId().intValue());
         this.setAffinity(fromProxy.getAffinity());
         this.setCharacter_name(fromProxy.getCharacter_name());
         this.setGender(fromProxy.getGender());

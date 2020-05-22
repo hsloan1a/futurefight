@@ -1,5 +1,8 @@
+import {Character} from "./Character";
+
 export interface LevelWinDetails {
     id: number,
     notes: string,
-    shadowlandLevel: number
+    winning_characters: Character[],
+    won_date: Date
 }

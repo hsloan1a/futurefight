@@ -3,7 +3,8 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 
 type CharacterAdd = {
-    characterName: string
+    characterName: string,
+    displayButton: boolean
 }
 
 export const CharacterAdd = (props: CharacterAdd) => {
@@ -13,7 +14,7 @@ export const CharacterAdd = (props: CharacterAdd) => {
                 <Card.Body>
                     <Card.Title>{props.characterName}</Card.Title>
 
-                    <Button variant="primary">Remove</Button>
+                    {props.displayButton ? <Button variant="primary">Remove</Button> : null}
                 </Card.Body>
             </Card>
         </div>

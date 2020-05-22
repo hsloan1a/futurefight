@@ -44,7 +44,7 @@ public class CharacterController {
     }
 
     @GetMapping("/character/{id}")
-    public EntityModel<MarvelCharacter> getCharacter(@PathVariable Integer id){
+    EntityModel<MarvelCharacter> getCharacter(@PathVariable Integer id){
         Optional<MarvelCharacter> findCharacter = marvelCharacterRepository.findById(id);
         if (!findCharacter.isPresent())
             throw new MarvelCharacterNotFound("Character with id=" + id);

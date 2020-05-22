@@ -1,12 +1,13 @@
 import React from 'react'
 import {Table} from 'react-bootstrap';
 import {Character} from "../shadowland/model/Character";
-import {filter} from "underscore";
+import {filter, map} from "underscore";
 import CharacterTableDetail from "./CharacterTableDetail";
 
 type CharacterListProps = {
     filteredList: Array<Character>,
     title: string,
+    addCharacter: (arg0: Character) => void
 }
 
 type CharacterListState = {
@@ -46,7 +47,13 @@ class CharacterList extends React.Component<CharacterListProps,CharacterListStat
                     </tr>
                     </thead>
                     <tbody>
-                    {filteredList && filteredList.length > 0 && <CharacterTableDetail characterList={textFilteredList} />}
+                    {textFilteredList && map(textFilteredList, (character: Character) => {
+                        return (
+                            <>
+                            <CharacterTableDetail key={character.id} addCharacter={this.props.addCharacter} character={character} />
+                            </>
+                        )
+                    })}
                     </tbody>
                 </Table>
             </div>

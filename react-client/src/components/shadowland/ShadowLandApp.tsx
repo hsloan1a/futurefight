@@ -4,7 +4,7 @@ import {Col, Container, Row} from "react-bootstrap";
 import LevelList from "./level/LevelList";
 import {Level} from "./model/Level";
 import axios from "axios";
-import {map, uniq, filter} from "underscore"
+import {contains, filter, map, uniq} from "underscore"
 import LevelListDetail from "./level/LevelListDetail";
 import CharacterList from "../character/CharacterList";
 import {Character} from "./model/Character";
@@ -28,12 +28,20 @@ class ShadowLandApp extends React.Component<any, any> {
         allCharactersList: [],
         previouslyWon: [],
         selectedLevel: null,
-        allCharactersFilteredList: []
+        allCharactersFilteredList: [],
+        charactersToAdd: []
 
     }
 
+    private resetToDefaultValues = () => {
+        this.setState({charactersToAdd: [],
+            allCharactersFilteredList: [...this.state.allCharactersList],
+            selectedLevel: null})
+    }
+
     private setLevel = (currentLevel: number) => {
-        this.setState({currentLevel, allCharactersFilteredList: [...this.state.allCharactersList]});
+        this.setState({currentLevel});
+        this.resetToDefaultValues();
     }
 
     private addLevel = (level: Level) => {
@@ -52,14 +60,17 @@ class ShadowLandApp extends React.Component<any, any> {
         const allCharactersFilteredList = filter([...this.state.allCharactersList], (character: Character) =>
             {
                 let advantage = level.floor_advantage.toLowerCase();
-                return character.affinity.toLowerCase() === level.floor_advantage.toLowerCase()
+                switch (advantage) {
+                    case 'male':
+                    case 'female':{
+                        return character.gender.toLowerCase() === level.floor_advantage.toLowerCase();
+                    }
+                    default:
+                        return character.affinity.toLowerCase() === level.floor_advantage.toLowerCase();
+                }
             })
-
-        // if (this.state.selectedLevel == null || selectedLevel !== this.state.selectedLevel)
-        this.setState({allCharactersFilteredList})
-
-
-
+        this.resetToDefaultValues();
+        this.setState({allCharactersFilteredList, selectedLevel: level})
     }
 
     private deleteLevel = (levelId: number) => {
@@ -70,6 +81,14 @@ class ShadowLandApp extends React.Component<any, any> {
                 this.setState({allLevels: filter(allLevels, (level:Level) => {return level.id!==levelId})})
             }
         })
+    }
+
+    private addCharacterToLevelList = (character: Character) => {
+        const charactersToAdd: Character[] = [...this.state.charactersToAdd]
+        if (this.state.selectedLevel && charactersToAdd && !contains(charactersToAdd, character)){
+            charactersToAdd.push(character);
+            this.setState({charactersToAdd})
+        }
     }
 
     componentDidMount = (): void => {
@@ -90,7 +109,7 @@ class ShadowLandApp extends React.Component<any, any> {
     }
 
     render = () => {
-        const {allCharactersFilteredList, previouslyWon} = this.state;
+        const {allCharactersFilteredList, charactersToAdd, previouslyWon} = this.state;
         return (
             <Container>
                 <Row>
@@ -110,15 +129,16 @@ class ShadowLandApp extends React.Component<any, any> {
                         currentSelectedLevel={this.state.currentLevel}
                         deleteLevel={this.deleteLevel}
                         currentSelectedLevelDetail={this.currentSelectedLevelDetail}
+                        charactersToAdd={charactersToAdd}
                         />
                     </Col>
                 </Row>
                 <Row>
                     <Col sm>
-                        <CharacterList filteredList={allCharactersFilteredList} title={"All Characters"} />
+                        <CharacterList addCharacter={this.addCharacterToLevelList} filteredList={allCharactersFilteredList} title={"All Characters"} />
                     </Col>
                     <Col sm>
-                        <CharacterList filteredList={previouslyWon} title={"Characters Previously Used"} />
+                        <CharacterList addCharacter={this.addCharacterToLevelList} filteredList={previouslyWon} title={"Characters Previously Used"} />
                     </Col>
                 </Row>
             </Container>

@@ -1,5 +1,6 @@
 package com.futurefight.shadowland.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -14,9 +15,10 @@ public class ShadowlandLevel {
     private Long id;
 
     @Nullable
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY,
             cascade = CascadeType.ALL, mappedBy = "shadowlandLevel")
-    private Set<ShadowlandLevelWinDetails> previously_won;
+    private Set<ShadowlandLevelWinDetail> previously_won;
 
     private FloorType floor_type;
 
@@ -31,7 +33,7 @@ public class ShadowlandLevel {
     public ShadowlandLevel() {
     }
 
-    public ShadowlandLevel(@Nullable Set<ShadowlandLevelWinDetails> previously_won,
+    public ShadowlandLevel(@Nullable Set<ShadowlandLevelWinDetail> previously_won,
                            FloorType floor_type,
                            Integer level,
                            String character_portrait,
@@ -52,11 +54,11 @@ public class ShadowlandLevel {
     }
 
     @Nullable
-    public Set<ShadowlandLevelWinDetails> getPreviously_won() {
+    public Set<ShadowlandLevelWinDetail> getPreviously_won() {
         return previously_won;
     }
 
-    public void setPreviously_won(@Nullable Set<ShadowlandLevelWinDetails> previously_won) {
+    public void setPreviously_won(@Nullable Set<ShadowlandLevelWinDetail> previously_won) {
         this.previously_won = previously_won;
     }
 
